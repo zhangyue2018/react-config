@@ -106,5 +106,6 @@ module.exports = {
         port: 3002,
         open: true,
         hot: true, // 开启HMR
+        historyApiFallback: true, // 解决前端路由刷新404问题
     }
 }
