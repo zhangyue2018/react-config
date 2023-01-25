@@ -1,6 +1,7 @@
 const path = require('path');
 const EslintWebpackPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 process.env.NODE_ENV = 'development';
 // 返回处理样式loader的函数
@@ -65,10 +66,11 @@ module.exports = {
                 test: /\.jsx?$/,
                 include: path.resolve(__dirname,'../src'),
                 loader: 'babel-loader',
-                // options: {
-                //     cacheDirectory: true, // 开启缓存
-                //     cacheCompression: false, // 不开启压缩
-                // }
+                options: {
+                    cacheDirectory: true, // 开启缓存
+                    cacheCompression: false, // 不开启压缩
+                    plugins: ['react-refresh/babel'], // 激活js的HMR
+                },
             }
         ]
     },
@@ -76,12 +78,13 @@ module.exports = {
         new EslintWebpackPlugin({
             context: path.resolve(__dirname, '../src'), // 指定文件根目录
             exclude: 'node_modules',
-            // cache: true,
-            // cacheLocation: path.resolve(__dirname, '../node_modules/.cache/.eslintcache'),
+            cache: true,
+            cacheLocation: path.resolve(__dirname, '../node_modules/.cache/.eslintcache'),
         }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, '../public/index.html'),
         }),
+        new ReactRefreshWebpackPlugin(), // 激活js的HMR
     ],
     mode: 'development',
     devtool: 'cheap-module-source-map',
@@ -94,14 +97,14 @@ module.exports = {
         }
     },
     // webpack解析模块加载选项
-    // resolve: {
-    //     // 自动补全文件扩展名
-    //     extensions: [".jsx", ".js", ".json"]
-    // },
+    resolve: {
+        // 自动补全文件扩展名
+        extensions: [".jsx", ".js", ".json"]
+    },
     devServer: {
         host: 'localhost',
         port: 3002,
         open: true,
-        hot: true,
+        hot: true, // 开启HMR
     }
 }
