@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run dev",
-    "dev": "webpack server --config ./config/webpack.dev.js",
-    "build": "webpack --config ./config/webpack.prod.js"
+    "dev": "cross-env NODE_ENV=development webpack server --config ./config/webpack.config.js ",
+    "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.config.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "babel-loader": "^8.3.0",
     "babel-preset-react-app": "^10.0.1",
     "copy-webpack-plugin": "^11.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.7.3",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "eslint-config-react-app": "^7.0.1",
