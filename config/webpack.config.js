@@ -40,6 +40,7 @@ module.exports = {
         filename: isProduction ? 'static/js/[name].[contenthash:10].js' : 'static/js/[name].js',
         chunkFilename: isProduction ? 'static/js/[name].[contenthash:10].chunk.js' : 'static/js/[name].chunk.js',
         assetModuleFilename: 'static/media/[hash:10][ext][query]',
+        clean: true,
     },
     module: {
         rules: [
@@ -119,6 +120,26 @@ module.exports = {
     optimization: {
         splitChunks: {
             chunks: 'all',
+            cacheGroups: {
+                // react react-dom react-router-dom打包成一个js文件
+                // antd单独打包成一个js文件
+                // 剩下node_modules打包成一个js文件
+                react: {
+                    test: /node_modules[\\/]react(.*)?[\\/]/,
+                    name: 'chunck-react',
+                    priority: 40,
+                },
+                antd: {
+                    test: /node_modules[\\/]antd[\\/]/,
+                    name: 'chunk-antd',
+                    priority: 30,
+                },
+                libs: {
+                    test: /node_modules[\\/]/,
+                    name: 'chunk-libs',
+                    priority: 20
+                }
+            }
         },
         runtimeChunk: {
             name: (entryPoint) => `runtime~${entryPoint.name}`
@@ -142,5 +163,6 @@ module.exports = {
         open: true,
         hot: true, // 开启HMR
         historyApiFallback: true, // 解决前端路由刷新404问题
-    }
+    },
+    performance: false, // 关闭性能分析，提升打包速度
 }
